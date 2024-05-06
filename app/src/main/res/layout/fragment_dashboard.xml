@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border_background"
+    android:orientation="vertical"
+    android:layout_marginBottom="45dp"
+    android:paddingBottom="15dp">
+
+    <ListView
+        android:id="@+id/listViewUsers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="2dp"
+        android:paddingEnd="4dp"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <!-- Icon for each user -->
+        <ImageView
+            android:id="@+id/personIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:paddingTop="6dp"
+            android:src="@drawable/baseline_account_circle_24"
+            android:tint="@color/purple_500"/>
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/textViewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="24sp"
+            android:textColor="#000000"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Icon for editing user -->
+        <ImageView
+            android:id="@+id/editIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_edit_24"
+            android:layout_marginEnd="8dp"
+            android:tint="@color/purple_500"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
