@@ -1,7 +1,10 @@
 package com.example.bottomnavviewsactivity.ui.dashboard;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -10,11 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.bottomnavviewsactivity.R; // Assuming R.layout.list_item_user exists in your project
+import com.example.bottomnavviewsactivity.R;
 import com.example.bottomnavviewsactivity.ui.home.User;
 
 import java.util.List;
-
 
 public class UserListAdapter extends ArrayAdapter<User> {
     private Context mContext;
@@ -31,16 +33,10 @@ public class UserListAdapter extends ArrayAdapter<User> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.fragment_dashboard, parent, false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item_user, parent, false);
         }
 
         User currentUser = mUsers.get(position);
-
-//        TextView textViewName = listItem.findViewById(R.id.textViewName);
-//        textViewName.setText(currentUser.getName() + " " + currentUser.getLastName());
-//
-//        TextView textViewEmail = listItem.findViewById(R.id.textViewEmail);
-//        textViewEmail.setText(currentUser.getEmail());
 
         TextView textViewUsername = listItem.findViewById(R.id.textViewUsername);
         textViewUsername.setText(currentUser.getUsername());
