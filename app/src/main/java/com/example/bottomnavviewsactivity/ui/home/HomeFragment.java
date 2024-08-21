@@ -2,6 +2,7 @@ package com.example.bottomnavviewsactivity.ui.home;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bottomnavviewsactivity.databinding.FragmentHomeBinding;
 import android.app.DatePickerDialog;
@@ -80,24 +80,29 @@ public class HomeFragment extends Fragment {
                 } else if (!isDateRangeValid()) {
                     Toast.makeText(requireContext(), "End date cannot be before start date", Toast.LENGTH_SHORT).show();
                 } else {
-                    // All fields are filled and email format is valid, proceed to save to database
-                    User user = new User();
-                    user.setName(name);
-                    user.setLastName(lastName);
-                    user.setEmail(email);
-                    user.setUsername(username);
-                    user.setStartDate(startDate);
-                    user.setEndDate(endDate);
-
-                    // Save user to database
                     UserDatabaseHelper dbHelper = new UserDatabaseHelper(requireContext());
-                    dbHelper.addUser(user);
 
-                    // Optionally, you can show a success message to the user
-                    Toast.makeText(requireContext(), "User saved successfully", Toast.LENGTH_SHORT).show();
+                    if (dbHelper.doesUsernameExist(username, -1)) {
+                        Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
+                    }else{
+                        // All fields are filled and email format is valid, proceed to save to database
+                        User user = new User();
+                        user.setName(name);
+                        user.setLastName(lastName);
+                        user.setEmail(email);
+                        user.setUsername(username);
+                        user.setStartDate(startDate);
+                        user.setEndDate(endDate);
 
-                    // Clear EditText fields after submission
-                    clearFormFields();
+                        // Save user to database
+                        dbHelper.addUser(user);
+
+                        // Optionally, you can show a success message to the user
+                        Toast.makeText(requireContext(), "User saved successfully", Toast.LENGTH_SHORT).show();
+
+                        // Clear EditText fields after submission
+                        clearFormFields();
+                    }
                 }
             }
         });
@@ -115,6 +120,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year, monthOfYear, dayOfMonth);
+                        // we add because because javas calendar are 0 based
                         String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                         editText.setText(selectedDate);
 
@@ -149,13 +155,20 @@ public class HomeFragment extends Fragment {
     private void clearFormFields() {
         editTextName.setText(null);
         editTextLastName.setText(null);
-        editTextEmail.setText(null);
+        editTextEmail.setText("");
         editTextUsername.setText(null);
         editTextStartDate.setText(null);
         editTextEndDate.setText(null);
         // Reset the calendars
         startDateCalendar = Calendar.getInstance();
         endDateCalendar = Calendar.getInstance();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Clear the form fields every time the fragment is resumed
+        clearFormFields();
     }
 
     @Override

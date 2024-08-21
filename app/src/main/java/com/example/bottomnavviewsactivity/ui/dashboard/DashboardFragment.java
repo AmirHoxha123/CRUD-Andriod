@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bottomnavviewsactivity.ModifyUser;
 import com.example.bottomnavviewsactivity.databinding.FragmentDashboardBinding;
@@ -43,7 +41,7 @@ public class DashboardFragment extends Fragment {
         users = dbHelper.showUsers(); // Initialize users after dbHelper
 
         listViewUsers = root.findViewById(R.id.listViewUsers);
-        initSearchWidgets(root); // Pass root to initSearchWidgets
+        setupUserSearchView(root); // Pass root to setupUserSearchView
 
         binding.listViewUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +80,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    private void initSearchWidgets(View root) {
+    private void setupUserSearchView(View root) {
         SearchView searchView = root.findViewById(R.id.searchUser);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

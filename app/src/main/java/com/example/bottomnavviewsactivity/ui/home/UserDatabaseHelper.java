@@ -64,9 +64,7 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN_CREDENTIALS);
-        onCreate(db);
+
     }
 
     public boolean addUser(User user) {
@@ -148,6 +146,7 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             cursor = db.query(TABLE_LOGIN_CREDENTIALS, columns, selection, selectionArgs, null, null, null);
+            // go to first row
             if (cursor != null && cursor.moveToFirst()) {
                 return true; // Credentials valid
             }
@@ -160,13 +159,35 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
         }
         return false; // Credentials not valid
     }
-    public void clearUsersTable() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        try {
-            db.execSQL("DELETE FROM " + TABLE_USERS);
-        } catch (Exception e) {
-            Log.e("clearUsersTable", "Error clearing table: " + e.getMessage());
+
+    public boolean doesUsernameExist(String username, int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection;
+        String[] selectionArgs;
+
+        if (userId != -1) {
+            selection = "LOWER(username) = LOWER(?) AND id != ?";
+            selectionArgs = new String[]{username, String.valueOf(userId)};
+        } else {
+            selection = "LOWER(username) = LOWER(?)";
+            selectionArgs = new String[]{username};
         }
+
+        Cursor cursor = db.query(
+                "users",
+                new String[]{"username"},
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        db.close();
+        return exists;
     }
 
 }

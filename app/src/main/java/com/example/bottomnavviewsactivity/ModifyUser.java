@@ -38,12 +38,11 @@ public class ModifyUser extends AppCompatActivity {
 
         // Inflate the layout containing titleTextView
         View headerView = LayoutInflater.from(this).inflate(R.layout.action_bar_layout, null);
-
         TextView titleTextView = headerView.findViewById(R.id.titleTextView);
-
         titleTextView.setText("Modify " + name);
 
-        ActionBar actionBar = getSupportActionBar(); // or getActionBar() depending on your setup
+        // for adding the custom action bar
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(headerView);
@@ -105,6 +104,7 @@ public class ModifyUser extends AppCompatActivity {
 
         Button btnUpdate = findViewById(R.id.btn_update);
         btnUpdate.setOnClickListener(v -> {
+            UserDatabaseHelper dbHelper = new UserDatabaseHelper(ModifyUser.this);
             int userId = getIntent().getIntExtra("id", -1);
             String newName = textViewName.getText().toString();
             String newLastName = textViewLastName.getText().toString();
@@ -113,20 +113,22 @@ public class ModifyUser extends AppCompatActivity {
             String newStartDate = editTextStartDate.getText().toString();
             String newEndDate = editTextEndDate.getText().toString();
 
-            if (newName.isEmpty() || newLastName.isEmpty() || newEmail.isEmpty() || newUsername.isEmpty()) {
+            if (newName.isEmpty() || newLastName.isEmpty() || newEmail.isEmpty() || newUsername.isEmpty() || newStartDate.isEmpty() || newEndDate.isEmpty()) {
                 Toast.makeText(ModifyUser.this, "All fields are required", Toast.LENGTH_SHORT).show();
             } else if (!isValidEmail(newEmail)) {
                 Toast.makeText(ModifyUser.this, "Invalid email format", Toast.LENGTH_SHORT).show();
             } else if (!isDateRangeValid()) {
                 Toast.makeText(ModifyUser.this, "End date cannot be before start date", Toast.LENGTH_SHORT).show();
-            } else {
+            }else if (dbHelper.doesUsernameExist(newUsername, userId)){
+                Toast.makeText(ModifyUser.this, "Username already exists", Toast.LENGTH_SHORT).show();
+            }else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ModifyUser.this);
                 builder.setTitle("Confirm Update");
                 builder.setMessage("Are you sure you want to update " + name);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     User updatedUser = new User(userId, newName, newLastName, newEmail, newUsername, newStartDate, newEndDate);
-                    UserDatabaseHelper dbHelper = new UserDatabaseHelper(ModifyUser.this);
                     boolean isUpdated = dbHelper.updateUser(updatedUser);
+
                     if (isUpdated) {
                         Toast.makeText(ModifyUser.this, "User updated successfully", Toast.LENGTH_SHORT).show();
                         textViewName.setText(newName);
@@ -135,6 +137,7 @@ public class ModifyUser extends AppCompatActivity {
                         textViewUsername.setText(newUsername);
                         editTextStartDate.setText(newStartDate);
                         editTextEndDate.setText(newEndDate);
+                        finish();
                     } else {
                         Toast.makeText(ModifyUser.this, "Failed to update user", Toast.LENGTH_SHORT).show();
                     }

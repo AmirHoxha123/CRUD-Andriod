@@ -25,6 +25,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // përcakton ndërfaqen për këtë fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -48,7 +49,7 @@ public class LoginFragment extends Fragment {
 
                     // Navigate to HomeFragment using action ID
                     NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.action_loginFragment_to_navigation_home);
+                    navController.navigate(R.id.navigation_home);
                 } else {
                     Toast.makeText(getActivity(), "Invalid Credentials", Toast.LENGTH_SHORT).show();
                 }
