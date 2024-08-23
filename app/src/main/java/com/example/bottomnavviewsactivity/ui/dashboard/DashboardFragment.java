@@ -41,7 +41,7 @@ public class DashboardFragment extends Fragment {
         users = dbHelper.showUsers(); // Initialize users after dbHelper
 
         listViewUsers = root.findViewById(R.id.listViewUsers);
-        setupUserSearchView(root); // Pass root to setupUserSearchView
+        setupUserSearchView(root); // Pass root to connect with xml
 
         binding.listViewUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

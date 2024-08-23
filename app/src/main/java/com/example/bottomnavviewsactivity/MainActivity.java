@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_dashboard)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        //Sets up the action bar to work with the navigation controller, ensuring proper navigation behavior
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //Connects the BottomNavigationView with the NavController so that the bottom navigation items reflect the current fragment
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // Add the destination changed listener to handle visibility of navView and action bar
